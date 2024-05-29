@@ -3,6 +3,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
+class WrongAge extends Exception {
+    public WrongAge(String message) {
+      super(message);
+    }
+  }
+
 class Main {
   public static void main(String[] args) {
     try {
@@ -24,9 +30,17 @@ class Main {
             System.out.println("Podaj wiek studenta:");
             int wiek = scanner.nextInt();
             scanner.nextLine();
-            System.out.println("Podaj date urodzenia studenta:");
-            String data = scanner.nextLine();
-          service.addStudent(new Student(imie, nazwisko, wiek, data));
+            if (wiek <= 0) {
+              try {
+                throw new WrongAge("Niepoprawny wiek:");
+              } catch (WrongAge e) {
+                System.out.println("Błąd: " + e.getMessage());
+              }
+            } else {
+              System.out.println("Podaj date urodzenia studenta:");
+              String data = scanner.nextLine();
+              service.addStudent(new Student(imie, nazwisko, wiek, data));
+            }
             break;
           case "2":
             var students = service.getStudents();
